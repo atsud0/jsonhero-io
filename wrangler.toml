@@ -1,6 +1,6 @@
 name = "jsonhero-io"
-type = "javascript"
 compatibility_date = "2026-04-01" 
+main = "build/worker.js"
 
 
 account_id = "0e405dda228e3448f1366acb0bc341ef"
@@ -13,10 +13,6 @@ kv_namespaces = [
 [vars]
 GRAPH_JSON_COLLECTION = "jsonhero-dev"
 
-main = "build/worker.js"
-
-[build.upload]
-format="service-worker"
 
 [env.production]
 route = "jsonhero.io/*"
