@@ -1,6 +1,6 @@
 name = "jsonhero-io"
 compatibility_date = "2026-04-01" 
-main = "build/worker.js"
+main = "build/index.js"
 
 
 account_id = "0e405dda228e3448f1366acb0bc341ef"
