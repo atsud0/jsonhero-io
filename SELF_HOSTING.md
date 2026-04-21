@@ -1,5 +1,9 @@
 ## Deploying to Cloudflare
 
+This repository still uses Wrangler 2.x in `package.json`, so the deploy command
+should go through `wrangler publish` (or the packaged `npm run deploy` script),
+not `wrangler deploy`.
+
 ### Install and login to wrangler
 ```bash
 npm install -g wrangler
@@ -36,5 +40,14 @@ Optionally set other secrets listed at the end of `wrangler.toml`.
 
 ### Publish worker
 ```bash
-wrangler publish
+npm run deploy
 ```
+
+For production route deployment, use:
+
+```bash
+npm run deploy:production
+```
+
+If you are deploying from the Cloudflare dashboard, set the deploy command to
+`npm run deploy:cloudflare` or `npm run deploy:cloudflare:production`.
