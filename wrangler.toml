@@ -1,6 +1,7 @@
 name = "jsonhero-io"
 type = "javascript"
-compatibility_date = "2022-02-01"
+compatibility_date = "2026-04-01" 
+
 
 account_id = "0e405dda228e3448f1366acb0bc341ef"
 workers_dev = true
@@ -12,13 +13,7 @@ kv_namespaces = [
 [vars]
 GRAPH_JSON_COLLECTION = "jsonhero-dev"
 
-[site]
-bucket = "./public"
-entry-point = "."
-
-[build]
-command = "npm run build:worker"
-watch_dir = "build/index.js"
+main = "build/worker.js"
 
 [build.upload]
 format="service-worker"
