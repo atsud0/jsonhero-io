@@ -3,6 +3,7 @@ import type { ActionFunction, LoaderFunction } from "remix";
 import invariant from "tiny-invariant";
 import { createFromUrl, createFromUrlOrRawJson } from "~/jsonDoc.server";
 import { sendEvent } from "~/graphJSON.server";
+import type { RuntimeLoadContext } from "~/runtime-context.server";
 import {
   commitSession,
   getSession,
@@ -14,8 +15,12 @@ type CreateFromUrlError = {
 };
 
 export let action: ActionFunction = async ({ request, context }) => {
+  const loadContext = context as RuntimeLoadContext;
   const formData = await request.formData();
-  const toastCookie = await getSession(request.headers.get("cookie"));
+  const toastCookie = await getSession(
+    request.headers.get("cookie"),
+    loadContext.SESSION_SECRET
+  );
   const jsonUrl = formData.get("jsonUrl");
   const title = formData.get("title") as string;
 
@@ -39,7 +44,12 @@ export let action: ActionFunction = async ({ request, context }) => {
       );
 
       return redirect("/", {
-        headers: { "Set-Cookie": await commitSession(toastCookie) },
+        headers: {
+          "Set-Cookie": await commitSession(
+            toastCookie,
+            loadContext.SESSION_SECRET
+          ),
+        },
       });
     }
 
@@ -64,7 +74,12 @@ export let action: ActionFunction = async ({ request, context }) => {
     }
 
     return redirect("/", {
-      headers: { "Set-Cookie": await commitSession(toastCookie) },
+      headers: {
+        "Set-Cookie": await commitSession(
+          toastCookie,
+          loadContext.SESSION_SECRET
+        ),
+      },
     });
   }
 };

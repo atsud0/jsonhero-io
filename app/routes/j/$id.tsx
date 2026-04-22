@@ -36,6 +36,7 @@ import {
   setErrorMessage,
   setSuccessMessage,
 } from "~/services/toast.server";
+import type { RuntimeLoadContext } from "~/runtime-context.server";
 import { getRandomUserAgent } from '~/utilities/getRandomUserAgent'
 
 export const loader: LoaderFunction = async ({ params, request }) => {
@@ -89,7 +90,8 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   }
 };
 
-export const action: ActionFunction = async ({ request, params }) => {
+export const action: ActionFunction = async ({ request, params, context }) => {
+  const loadContext = context as RuntimeLoadContext;
   // Return if the request is not a DELETE
   if (request.method !== "DELETE") {
     return;
@@ -97,7 +99,10 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   invariant(params.id, "expected params.id");
 
-  const toastCookie = await getSession(request.headers.get("cookie"));
+  const toastCookie = await getSession(
+    request.headers.get("cookie"),
+    loadContext.SESSION_SECRET
+  );
 
   const document = await getDocument(params.id);
 
@@ -118,7 +123,12 @@ export const action: ActionFunction = async ({ request, params }) => {
   setSuccessMessage(toastCookie, "Document deleted successfully", "Success");
 
   return redirect("/", {
-    headers: { "Set-Cookie": await commitSession(toastCookie) },
+    headers: {
+      "Set-Cookie": await commitSession(
+        toastCookie,
+        loadContext.SESSION_SECRET
+      ),
+    },
   });
 };
 

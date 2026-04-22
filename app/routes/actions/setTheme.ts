@@ -3,9 +3,14 @@ import type { ActionFunction, LoaderFunction } from "remix";
 import { getThemeSession } from "~/theme.server";
 import { isTheme } from "~/components/ThemeProvider";
 import { sendEvent } from "~/graphJSON.server";
+import type { RuntimeLoadContext } from "~/runtime-context.server";
 
 export const action: ActionFunction = async ({ request, context }) => {
-  const themeSession = await getThemeSession(request);
+  const loadContext = context as RuntimeLoadContext;
+  const themeSession = await getThemeSession(
+    request,
+    loadContext.SESSION_SECRET
+  );
   const requestText = await request.text();
   const form = new URLSearchParams(requestText);
   const theme = form.get("theme");

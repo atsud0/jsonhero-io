@@ -11,21 +11,30 @@ import {
   getSession,
   ToastMessage,
 } from "../services/toast.server";
+import type { RuntimeLoadContext } from "~/runtime-context.server";
 import { json, useLoaderData } from "remix";
 import ToastPopover from "../components/UI/ToastPopover";
 import { HomeTriggerDevBanner } from "~/components/Home/HomeTriggerDevBanner";
 
 type LoaderData = { toastMessage?: ToastMessage };
 
-export async function loader({ request }: { request: Request }) {
+export async function loader({
+  request,
+  context,
+}: {
+  request: Request;
+  context: RuntimeLoadContext;
+}) {
   const cookie = request.headers.get("cookie");
-  const session = await getSession(cookie);
+  const session = await getSession(cookie, context.SESSION_SECRET);
   const toastMessage = session.get("toastMessage") as ToastMessage;
 
   return json(
     { toastMessage },
     {
-      headers: { "Set-Cookie": await commitSession(session) },
+      headers: {
+        "Set-Cookie": await commitSession(session, context.SESSION_SECRET),
+      },
     }
   );
 }

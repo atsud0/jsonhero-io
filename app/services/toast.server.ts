@@ -9,17 +9,27 @@ export type ToastMessage = {
 
 const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
 
-export const { commitSession, getSession } = createCookieSessionStorage({
-  cookie: {
-    name: "__message",
-    path: "/",
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: ONE_YEAR,
-    secrets: [SESSION_SECRET],
-    secure: true,
-  },
-});
+function createToastStorage(sessionSecret: string) {
+  return createCookieSessionStorage({
+    cookie: {
+      name: "__message",
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: ONE_YEAR,
+      secrets: [sessionSecret],
+      secure: true,
+    },
+  });
+}
+
+export function getSession(cookieHeader: string | null, sessionSecret: string) {
+  return createToastStorage(sessionSecret).getSession(cookieHeader);
+}
+
+export function commitSession(session: Session, sessionSecret: string) {
+  return createToastStorage(sessionSecret).commitSession(session);
+}
 
 export function setSuccessMessage(
   session: Session,

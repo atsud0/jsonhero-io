@@ -41,6 +41,7 @@ export const meta: MetaFunction = ({ location }) => {
 };
 
 import styles from "./tailwind.css";
+import type { RuntimeLoadContext } from "./runtime-context.server";
 import { getThemeSession } from "./theme.server";
 import { getStarCount } from "./services/github.server";
 import { StarCountProvider } from "./components/StarCountProvider";
@@ -56,8 +57,9 @@ export type LoaderData = {
   themeOverride?: Theme;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const themeSession = await getThemeSession(request);
+export const loader: LoaderFunction = async ({ request, context }) => {
+  const loadContext = context as RuntimeLoadContext;
+  const themeSession = await getThemeSession(request, loadContext.SESSION_SECRET);
   const starCount = await getStarCount();
   const themeOverride = getThemeFromRequest(request);
 

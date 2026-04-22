@@ -2,20 +2,21 @@ import { createCookieSessionStorage } from "remix";
 
 import { Theme, isTheme } from "~/components/ThemeProvider";
 
-const sessionSecret = SESSION_SECRET;
+function createThemeStorage(sessionSecret: string) {
+  return createCookieSessionStorage({
+    cookie: {
+      name: "theme-cookie",
+      secure: true,
+      secrets: [sessionSecret],
+      sameSite: "lax",
+      path: "/",
+      httpOnly: true,
+    },
+  });
+}
 
-const themeStorage = createCookieSessionStorage({
-  cookie: {
-    name: "theme-cookie",
-    secure: true,
-    secrets: [sessionSecret],
-    sameSite: "lax",
-    path: "/",
-    httpOnly: true,
-  },
-});
-
-async function getThemeSession(request: Request) {
+async function getThemeSession(request: Request, sessionSecret: string) {
+  const themeStorage = createThemeStorage(sessionSecret);
   const session = await themeStorage.getSession(request.headers.get("Cookie"));
   return {
     getTheme: () => {
