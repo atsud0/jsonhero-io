@@ -10,7 +10,10 @@ kv_namespaces = [
 ]
 
 [vars]
-GRAPH_JSON_COLLECTION = "jsonhero-dev"
+GRAPH_JSON_COLLECTION = "jsonhero-prod"
+
+route = "jsonhero.atsud0.me/*"
+zone_id = "9185dcbba83e4df397bc0ee52d63b457"
 
 [site]
 bucket = "./public"
@@ -22,16 +25,6 @@ watch_dir = "build/index.js"
 
 [build.upload]
 format = "service-worker"
-
-[env.production]
-route = "jsonhero.atsud0.me/*"
-zone_id = "9185dcbba83e4df397bc0ee52d63b457"
-kv_namespaces = [
-  { binding = "DOCUMENTS", id = "4124fe171f0e4890b39fcfe7c931035e" }
-]
-
-[env.production.vars]
-GRAPH_JSON_COLLECTION = "jsonhero-prod"
 
 # Secrets
 # [SESSION_STORAGE]
