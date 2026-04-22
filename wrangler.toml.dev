@@ -1,11 +1,11 @@
 type = "javascript"
 compatibility_date = "2022-02-01"
 
-account_id = "c974caaaa18255c03f1771097bade662"
+account_id = "0cf692be2d4cc5827c7ba87ae5bc34ce"
 workers_dev = true
 
 kv_namespaces = [ 
-  { binding = "DOCUMENTS", id = "a90ce96eb26c4989a1232db27e864ed6" }
+  { binding = "DOCUMENTS", id = "4124fe171f0e4890b39fcfe7c931035e" }
 ]
 
 [vars]
@@ -24,7 +24,7 @@ format="service-worker"
 
 [env.production]
 kv_namespaces = [ 
-  { binding = "DOCUMENTS", id = "a90ce96eb26c4989a1232db27e864ed6" }
+  { binding = "DOCUMENTS", id = "4124fe171f0e4890b39fcfe7c931035e" }
 ]
 
 [env.production.vars]
